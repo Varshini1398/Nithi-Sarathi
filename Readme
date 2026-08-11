@@ -1,6 +1,6 @@
 Nithi Sarathi 
 An AI-powered conversational assistant that helps Indian citizens discover government welfare schemes they may be eligible for.
-The Problem
+**The Problem**
 India has 3,000+ government welfare schemes across central and state levels — for farmers, students, gig workers, women, senior citizens, and more. Most citizens never discover the schemes they qualify for, because:
 ●	You need to already know a scheme's name to search for it
 ●	Eligibility rules are written in dense legal/bureaucratic language
@@ -13,4 +13,32 @@ NitiSarathi is a chat assistant that:
 ●	Uses Gemma 4 to reason over the retrieved scheme text and explain, in plain language, why the citizen is likely eligible, possibly eligible, or should check further
 ●	Returns a structured, easy-to-scan eligibility breakdown — not a wall of text
 For the project purpose only 12 policies are used. However, this can be sacled to even 3000+ policies.
+RAG — why it's needed here
+Stuffing all 3,000+ scheme descriptions into every prompt is slow, expensive, and eventually impossible as the token limit is exceeded. Instead:
+●	Each scheme is stored as a numerical embedding (its "meaning fingerprint")
+●	When a citizen describes their situation, that message is embedded too
+●	The system retrieves only the schemes whose meaning is closest to the citizen's message — concept matching, not exact keyword matching
+Important nuance: RAG only finds candidates. It does not decide eligibility by itself — Gemma 4 still has to read the retrieved scheme text and reason about whether this specific citizen's situation actually fits. Two AI-dependent steps, not one, both running on the Gemini API.
+Flow of the model
+
+Stage	Input Artifact	Processing Component	Output / Purpose
+1. Data Ingestion	data/schemes-list.csv	n8n-workflows/NitiSarathi-Ingestion.json	Structured Knowledge Base
+2. Reasoning & Logic	prompts/system-prompt.md	n8n-workflows/NitiSarathi-Backend.json	Gemma 4 Query Processing
+3. Demonstration	Completed Pipeline	demo/demo-video-link.md	End-to-End Walkthrough
+
+Procedure:
+●	Import n8n-workflows/NitiSarathi-Ingestion.json into your own n8n instance and run it once to embed the scheme data from data/schemes-list.csv
+●	Import n8n-workflows/NitiSarathi-Backend.json, add your own Google AI Studio API key, and activate the workflow
+●	Copy the resulting webhook URL into the Emergent frontend prompt (see prompts/ for the exact prompt used)
+●	Open the deployed Emergent URL and start chatting
+
+Benefit of Model:
+●	Who it helps most: rural households, gig workers, first-time scheme applicants, and community health workers who currently do this discovery manually for others
+●	Time saved: ~2–3 hours of manual research per person → a few minutes of conversation
+●	Scale: the same architecture generalizes to any country/domain with a large, fragmented catalog of eligibility-based programs
+Future scope:
+●	Add regional language support
+●	Expand the scheme corpus beyond the initial ~12–20 used for the hackathon demo to the full 3,000+
+●	Add a feedback loop so citizens can confirm/deny actual eligibility outcomes, improving future retrieval and reasoning
+●	Persist conversation history per citizen (currently session-only)
 
