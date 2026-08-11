@@ -1,0 +1,16 @@
+Nithi Sarathi 
+An AI-powered conversational assistant that helps Indian citizens discover government welfare schemes they may be eligible for.
+The Problem
+India has 3,000+ government welfare schemes across central and state levels — for farmers, students, gig workers, women, senior citizens, and more. Most citizens never discover the schemes they qualify for, because:
+●	You need to already know a scheme's name to search for it
+●	Eligibility rules are written in dense legal/bureaucratic language
+●	There's no single place that asks "who are you?" and tells you what applies to you
+Manually researching this today takes a citizen 2–3 hours of scattered searching, if they even know where to start. NitiSarathi turns that into a few minutes of natural conversation.
+The Solution
+NitiSarathi is a chat assistant that:
+●	Has a natural, adaptive conversation with the citizen — asking follow-up questions based on what they've already shared (no fixed script/form)
+●	Uses Retrieval-Augmented Generation (RAG) to pull only the most relevant schemes from a knowledge base of 3,000+ schemes, based on the meaning of what the citizen says
+●	Uses Gemma 4 to reason over the retrieved scheme text and explain, in plain language, why the citizen is likely eligible, possibly eligible, or should check further
+●	Returns a structured, easy-to-scan eligibility breakdown — not a wall of text
+For the project purpose only 12 policies are used. However, this can be sacled to even 3000+ policies.
+
